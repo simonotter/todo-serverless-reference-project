@@ -1,37 +1,37 @@
 import 'source-map-support/register';
 
-import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 
 import { CreateTodoRequest } from '../../requests/CreateTodoRequest';
 import * as uuid from 'uuid';
 import * as AWS from 'aws-sdk';
+
+import * as middy from 'middy';
+import { cors } from 'middy/middlewares';
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 const todosTable = process.env.TODOS_TABLE;
 
 
-export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
   console.log('Processing event: ', event);
 
   // Temporary: Made up user ID
   const userId = '12345';
 
-
   // Create Todo item
   const todoId = uuid.v4();
   const newTodo = await createTodo(todoId, userId, event);
 
-  // TODO: Implement creating a new TODO item
   return {
     statusCode: 201,
     body: JSON.stringify({newTodo})
   };
-};
+});
 
 async function createTodo(todoId: string, userId: string, event: any) {
-
   console.log('Creating item: ', event);
 
   const newTodo: CreateTodoRequest = JSON.parse(event.body);
@@ -52,5 +52,10 @@ async function createTodo(todoId: string, userId: string, event: any) {
   }).promise();
 
   return newItem;
-
 }
+
+handler.use(
+  cors({
+    credentials: true
+  })
+);
