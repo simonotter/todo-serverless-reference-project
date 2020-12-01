@@ -2,6 +2,8 @@ service: serverless-todo-app
 
 plugins:
   - serverless-webpack
+  - serverless-aws-documentation
+  - serverless-reqvalidator-plugin
   # - serverless-iam-roles-per-function
 
 provider:
@@ -12,7 +14,19 @@ provider:
   region: ${opt:region, 'eu-west-2'}
 
   apiGateway:
-    shouldStartNameWithService: true # Preparation for serverless v3.0.0
+    shouldStartNameWithService: true # Preparation for serverless framework v3.0.0
+
+custom:
+  documentation:
+    api:
+      info:
+        version: "v1.0.0"
+        title: "Todo API"
+        description: "Severless application for todo app"
+    models:
+      - name: "TodoRequest"
+        contentType: application/json
+        schema: ${file(models/create-todo-request.json)}
 
 functions:
 
@@ -34,6 +48,12 @@ functions:
       - http:
           method: post
           path: todos
+          reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create a new todo
+            description: Create a new todo
+            requestModels:
+              'application/json': "TodoRequest"
 
   # TODO: Configure this function
   # UpdateTodo:
@@ -59,6 +79,14 @@ functions:
   #         method: post
   #         path: todos/{todoId}/attachment
 
-# resources:
-#   Resources:
-    # TODO: Add any necessary AWS resources
+resources:
+  Resources:
+    
+    RequestBodyValidator:
+      Type: AWS::ApiGateway::RequestValidator
+      Properties:
+        Name: 'request-body-validator'
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: false
