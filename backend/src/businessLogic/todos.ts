@@ -7,7 +7,7 @@ import { CreateTodoRequest } from '../requests/CreateTodoRequest';
 const todoAccess = new TodoAccess();
 
 export async function deleteTodo(todoId: String) {
-  return todoAccess.deleteTodo(todoId);
+  return await todoAccess.deleteTodo(todoId);
 }
 
 export async function getTodos(): Promise<Todo[]> {

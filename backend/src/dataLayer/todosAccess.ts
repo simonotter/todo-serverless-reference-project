@@ -44,5 +44,6 @@ export class TodoAccess {
       }
     }).promise();
 
+    console.log(`Delete statement has completed without error`);
   }
 }
