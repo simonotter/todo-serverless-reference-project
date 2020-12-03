@@ -19,7 +19,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
 
     return {
       statusCode: 404,
-      body: ''
+      body: `error ${e}`
     };
   }
 
