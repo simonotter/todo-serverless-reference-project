@@ -13,7 +13,7 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-west-2'}
   environment:
-    TODOS_TABLE: Todos-${self:provider.stage}-2
+    TODOS_TABLE: Todos-${self:provider.stage}-3
     TODO_ID_INDEX: TodoIdIndex
   apiGateway:
     shouldStartNameWithService: true # Preparation for serverless framework v3.0.0
@@ -121,13 +121,15 @@ resources:
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
-          - AttributeName: createdAt
+          - AttributeName: todoId
             KeyType: RANGE
         GlobalSecondaryIndexes:
           - IndexName: ${self:provider.environment.TODO_ID_INDEX}
             KeySchema:
-            - AttributeName: todoId
+            - AttributeName: userId
               KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
             Projection:
               ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST

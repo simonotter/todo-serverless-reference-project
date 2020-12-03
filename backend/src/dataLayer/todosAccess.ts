@@ -40,6 +40,7 @@ export class TodoAccess {
     await this.docClient.delete({
       TableName: this.todosTable,
       Key: {
+        userId: '12345',
         todoId: todoId
       }
     }).promise();
