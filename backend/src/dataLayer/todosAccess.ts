@@ -34,13 +34,13 @@ export class TodoAccess {
     return todo;
   }
 
-  async deleteTodo(todoId: String) {
-    console.log(`Deleting a todo with id ${todoId}`);
+  async deleteTodo(todoId: String, userId: String) {
+    console.log(`Deleting a todo with id ${todoId} and userid ${userId}`);
 
     await this.docClient.delete({
       TableName: this.todosTable,
       Key: {
-        userId: '12345',
+        userId: userId,
         todoId: todoId
       }
     }).promise();

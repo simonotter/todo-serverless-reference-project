@@ -82,7 +82,7 @@ functions:
       - http:
           method: delete
           path: todos/{todoId}
-          # TODO: Add request validator
+          cors: true
           documentation:
             summary: Delete a todo
             description: Delete a todo
