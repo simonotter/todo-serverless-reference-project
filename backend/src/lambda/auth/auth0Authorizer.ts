@@ -3,6 +3,7 @@ import 'source-map-support/register';
 
 import { verify, decode } from 'jsonwebtoken';
 import { createLogger } from '../../utils/logger';
+import { getToken } from '../../auth/utils';
 // const axios = require('axios');  // Maybe use fetch instead of Axios
 import { Jwt } from '../../auth/Jwt';
 import { JwtPayload } from '../../auth/JwtPayload';
@@ -98,18 +99,4 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
 
 }
 
-function getToken(authHeader: string): string {
 
-  if (!authHeader) {
-    throw new Error('No authentication header');
-  }
-
-  if (!authHeader.toLowerCase().startsWith('bearer ')) {
-    throw new Error('Invalid authentication header');
-  }
-
-  const split = authHeader.split(' ');
-  const token = split[1];
-
-  return token;
-}

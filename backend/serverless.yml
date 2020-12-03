@@ -13,7 +13,7 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-west-2'}
   environment:
-    TODOS_TABLE: Todos-${self:provider.stage}-3
+    TODOS_TABLE: Todos-${self:provider.stage}-3 # TODO: Remove '-number' from end of string once table is finalised
     TODO_ID_INDEX: TodoIdIndex
   apiGateway:
     shouldStartNameWithService: true # Preparation for serverless framework v3.0.0
