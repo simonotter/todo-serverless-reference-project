@@ -3,9 +3,22 @@ import 'source-map-support/register';
 
 import { verify, decode } from 'jsonwebtoken';
 import { createLogger } from '../../utils/logger';
-// import Axios from 'axios'
+// const axios = require('axios');  // Maybe use fetch instead of Axios
 import { Jwt } from '../../auth/Jwt';
 import { JwtPayload } from '../../auth/JwtPayload';
+
+// TODO: Retreive certificate
+//
+// See Auth0 article: https://auth0.com/blog/navigating-rs256-and-jwks/#Retrieving-the-JWK
+//
+// const jwksUrl = 'https://dev--otter.eu.auth0.com/.well-known/jwks.json'
+
+// async function getCert() {
+//   let cert = await axios.get(jwksUrl);
+//   console.log(cert.data.keys[0].x5c[0]);
+// }
+
+// const certificate = getCert() as String;
 
 const certificate = `-----BEGIN CERTIFICATE-----
 MIIDCTCCAfGgAwIBAgIJanBQg55IydrgMA0GCSqGSIb3DQEBCwUAMCIxIDAeBgNV
@@ -29,10 +42,6 @@ VJR4XwDUJNY6sZLsNrmN7RGc2UV32qHZ3icmin/3fh/e0BM07RYTX6v8ijHTaMiY
 
 const logger = createLogger('auth');
 
-// TODO: Provide a URL that can be used to download a certificate that can be used
-// to verify JWT token signature.
-// To get this URL you need to go to an Auth0 page -> Show Advanced Settings -> Endpoints -> JSON Web Key Set
-// const jwksUrl = 'https://dev--otter.eu.auth0.com/.well-known/jwks.json'
 
 export const handler = async (
   event: CustomAuthorizerEvent
