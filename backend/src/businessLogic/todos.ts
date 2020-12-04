@@ -52,14 +52,4 @@ export async function updateTodo(
   todoId,
   userId);
 
-  // const tempTodo: Todo = {
-  //   userId: '12345',
-  //   todoId: '9999999',
-  //   createdAt: '29-11-2020',
-  //   name: 'sample todo',
-  //   dueDate: '29-11-2020',
-  //   done: true,
-  // };
-
-  // return tempTodo;
 }
