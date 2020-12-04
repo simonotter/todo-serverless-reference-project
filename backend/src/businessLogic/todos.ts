@@ -3,11 +3,11 @@ import * as uuid from 'uuid';
 import { Todo } from '../models/Todo';
 import { TodoAccess } from '../dataLayer/todosAccess';
 import { CreateTodoRequest } from '../requests/CreateTodoRequest';
-// import { UpdateTodoRequest } from '../requests/UpdateTodoRequest';
+import { UpdateTodoRequest } from '../requests/UpdateTodoRequest';
 
 const todoAccess = new TodoAccess();
 
-export async function deleteTodo(todoId: String, userId: String) {
+export async function deleteTodo(todoId: string, userId: string) {
   return await todoAccess.deleteTodo(todoId, userId);
 }
 
@@ -36,20 +36,30 @@ export async function createTodo(
   });
 }
 
-// export async function updateTodo(
-//   updateTodoRequest: UpdateTodoRequest,
-//   todoId: string,
-//   userId: string
-// ): Promise<Todo> {
+export async function updateTodo(
+  todoId: string,
+  updateTodoRequest: UpdateTodoRequest,
+  userId: string
+): Promise<Todo> {
 
-//   console.log('Entering Business Logic function');
+  console.log('Entering Business Logic function');
 
-//   return await todoAccess.updateTodo({
-//     userId: userId,
-//     todoId: todoId,
-//     name: updateTodoRequest.name,
-//     dueDate: updateTodoRequest.dueDate,
-//     done: updateTodoRequest.done,
-//     // attachmentUrl?: string
-//   });
-// }
+  return await todoAccess.updateTodo({
+    name: updateTodoRequest.name,
+    dueDate: updateTodoRequest.dueDate,
+    done: updateTodoRequest.done,
+  },
+  todoId,
+  userId);
+
+  // const tempTodo: Todo = {
+  //   userId: '12345',
+  //   todoId: '9999999',
+  //   createdAt: '29-11-2020',
+  //   name: 'sample todo',
+  //   dueDate: '29-11-2020',
+  //   done: true,
+  // };
+
+  // return tempTodo;
+}

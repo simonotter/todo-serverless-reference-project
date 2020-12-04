@@ -2,13 +2,13 @@ import * as AWS from 'aws-sdk';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
 import { Todo } from '../models/Todo';
+import { TodoUpdate } from '../models/TodoUpdate';
 
 export class TodoAccess {
 
   constructor(
     private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
     private readonly todosTable = process.env.TODOS_TABLE,
-    // private readonly todoIdIndex = process.env.TODO_ID_INDEX
     ) {}
 
   async getTodos(): Promise<Todo[]> {
@@ -34,7 +34,7 @@ export class TodoAccess {
     return todo;
   }
 
-  async deleteTodo(todoId: String, userId: String) {
+  async deleteTodo(todoId: string, userId: string) {
     console.log(`Deleting a todo with id ${todoId} and userid ${userId}`);
 
     await this.docClient.delete({
@@ -48,17 +48,31 @@ export class TodoAccess {
     console.log(`Delete statement has completed without error`);
   }
 
-//   async updateTodo(todoId: string, userId: string) {
-//     console.log(`Updating a todo with id ${todoId} and userid ${userId}`);
+  async updateTodo(todo: TodoUpdate, todoId: string, userId: string) {
+    console.log(`Updating a todo with id ${todoId} and userid ${userId}`);
 
-//     // await this.docClient.put({
-//     //   TableName: this.todosTable,
-//     //   Key: {
-//     //     userId: userId,
-//     //     todoId: todoId
-//     //   }
-//     // }).promise();
+    const params = {
+      TableName: this.todosTable,
+      Key: {
+        userId: userId,
+        todoId: todoId
+      },
+      ExpressionAttributeNames: {
+        '#todo_name': 'name',
+      },
+      ExpressionAttributeValues: {
+        ':name': todo.name,
+        ':dueDate': todo.dueDate,
+        ':done': todo.done,
+      },
+      UpdateExpression: 'SET #todo_name = :name, dueDate = :dueDate, done = :done',
+      ReturnValues: 'ALL_NEW',
+    };
 
-//     console.log(`Update statement has completed without error`);
-//   }
+    const result = await this.docClient.update(params).promise();
+
+    console.log(`Update statement has completed without error`, result);
+
+    return result.Attributes as Todo;
+  }
 }
