@@ -9,12 +9,12 @@ import { deleteTodo } from '../../businessLogic/todos';
 import { getToken, parseUserId } from '../../auth/utils';
 import { createLogger } from '../../utils/logger';
 
-const logger = createLogger('create');
+const logger = createLogger('deleteTodo');
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const todoId = event.pathParameters.todoId;
 
-  console.log('Processing event: ', event);
+  logger.info('Processing event: ', { event: event });
 
   // Get user id
   const authHeader = event.headers.Authorization;

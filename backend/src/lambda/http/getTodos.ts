@@ -8,10 +8,14 @@ import { cors } from 'middy/middlewares';
 import { getTodos } from '../../businessLogic/todos';
 import { getToken, parseUserId } from '../../auth/utils';
 
+import { createLogger } from '../../utils/logger';
+
+const logger = createLogger('getTodos');
+
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
-  console.log('Processing event: ', event);
+  logger.info('Processing event: ', {event: event});
 
   const authHeader = event.headers.Authorization;
   const jwtToken = getToken(authHeader);

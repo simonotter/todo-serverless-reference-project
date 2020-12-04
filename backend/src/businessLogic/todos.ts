@@ -5,6 +5,10 @@ import { TodoAccess } from '../dataLayer/todosAccess';
 import { CreateTodoRequest } from '../requests/CreateTodoRequest';
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest';
 
+import { createLogger } from '../utils/logger';
+
+const logger = createLogger('todosBusinessLogic');
+
 const todoAccess = new TodoAccess();
 
 export async function deleteTodo(todoId: string, userId: string) {
@@ -20,7 +24,7 @@ export async function createTodo(
   userId: string
 ): Promise<Todo> {
 
-  console.log('Entering Business Logic function');
+  logger.info('Entering Business Logic function');
 
   const todoId = uuid.v4();
   const timestamp = new Date().toISOString();
@@ -42,7 +46,7 @@ export async function updateTodo(
   userId: string
 ): Promise<Todo> {
 
-  console.log('Entering Business Logic function');
+  logger.info('Entering Business Logic function');
 
   return await todoAccess.updateTodo({
     name: updateTodoRequest.name,

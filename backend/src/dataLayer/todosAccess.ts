@@ -4,6 +4,9 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { Todo } from '../models/Todo';
 import { TodoUpdate } from '../models/TodoUpdate';
 
+import { createLogger } from '../utils/logger';
+
+const logger = createLogger('todosDataAccess');
 export class TodoAccess {
 
   constructor(
@@ -12,7 +15,7 @@ export class TodoAccess {
     ) {}
 
   async getTodos(userId: string): Promise<Todo[]> {
-    console.log('Getting all todos');
+    logger.info('Getting all todos');
 
     const result = await this.docClient.query({
       TableName: this.todosTable,
@@ -31,7 +34,9 @@ export class TodoAccess {
   }
 
   async createTodo(todo: Todo): Promise<Todo> {
-    console.log(`Creating a todo with id ${todo.todoId}`);
+    logger.info(`Creating a todo`, {
+      todoId: todo.todoId
+    });
 
     await this.docClient.put({
       TableName: this.todosTable,
@@ -42,7 +47,10 @@ export class TodoAccess {
   }
 
   async deleteTodo(todoId: string, userId: string) {
-    console.log(`Deleting a todo with id ${todoId} and userid ${userId}`);
+    logger.info(`Deleting a todo`, {
+      todoId: todoId,
+      userId: userId
+    });
 
     await this.docClient.delete({
       TableName: this.todosTable,
@@ -52,11 +60,14 @@ export class TodoAccess {
       }
     }).promise();
 
-    console.log(`Delete statement has completed without error`);
+    logger.info(`Delete statement has completed without error`);
   }
 
   async updateTodo(todo: TodoUpdate, todoId: string, userId: string) {
-    console.log(`Updating a todo with id ${todoId} and userid ${userId}`);
+    logger.info(`Updating a todo`, {
+      todoId: todoId,
+      userId: userId
+    });
 
     const params = {
       TableName: this.todosTable,
@@ -78,7 +89,7 @@ export class TodoAccess {
 
     const result = await this.docClient.update(params).promise();
 
-    console.log(`Update statement has completed without error`, result);
+    logger.info(`Update statement has completed without error`, { result: result });
 
     return result.Attributes as Todo;
   }
