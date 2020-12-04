@@ -34,9 +34,12 @@ custom:
         title: "Todo API"
         description: "Severless application for todo app"
     models:
-      - name: "TodoRequest"
+      - name: "CreateTodoRequest"
         contentType: application/json
         schema: ${file(models/create-todo-request.json)}
+      - name: "UpdateTodoRequest"
+        contentType: application/json
+        schema: ${file(models/update-todo-request.json)}
 
 functions:
 
@@ -50,9 +53,8 @@ functions:
           method: get
           path: todos
           cors: true
-          authorizer: Auth
+          # authorizer: Auth
 
-  # TODO: Configure this function
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
     events:
@@ -60,20 +62,28 @@ functions:
           method: post
           path: todos
           cors: true
+          authorizer: Auth
           reqValidatorName: RequestBodyValidator
           documentation:
             summary: Create a new todo
             description: Create a new todo
             requestModels:
-              'application/json': "TodoRequest"
+              'application/json': CreateTodoRequest
 
-  # TODO: Configure this function
   # UpdateTodo:
   #   handler: src/lambda/http/updateTodo.handler
   #   events:
   #     - http:
   #         method: patch
   #         path: todos/{todoId}
+  #         cors: true
+  #         authorizer: Auth
+  #         reqValidatorName: RequestBodyValidator
+  #         documentation:
+  #           summary: Create a new todo
+  #           description: Create a new todo
+  #           requestModels:
+  #             'application/json': UpdateTodoRequest
 
   # TODO: Configure this function
   DeleteTodo:
@@ -83,6 +93,7 @@ functions:
           method: delete
           path: todos/{todoId}
           cors: true
+          authorizer: Auth
           documentation:
             summary: Delete a todo
             description: Delete a todo
@@ -95,6 +106,8 @@ functions:
   #     - http:
   #         method: post
   #         path: todos/{todoId}/attachment
+  #         cors: true
+  #         authorizer: Auth
 
 resources:
   Resources:

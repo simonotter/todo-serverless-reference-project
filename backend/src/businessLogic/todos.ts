@@ -3,6 +3,7 @@ import * as uuid from 'uuid';
 import { Todo } from '../models/Todo';
 import { TodoAccess } from '../dataLayer/todosAccess';
 import { CreateTodoRequest } from '../requests/CreateTodoRequest';
+// import { UpdateTodoRequest } from '../requests/UpdateTodoRequest';
 
 const todoAccess = new TodoAccess();
 
@@ -21,8 +22,8 @@ export async function createTodo(
 
   console.log('Entering Business Logic function');
 
-  const timestamp = new Date().toISOString();
   const todoId = uuid.v4();
+  const timestamp = new Date().toISOString();
 
   return await todoAccess.createTodo({
     userId: userId,
@@ -34,3 +35,21 @@ export async function createTodo(
     // attachmentUrl?: string
   });
 }
+
+// export async function updateTodo(
+//   updateTodoRequest: UpdateTodoRequest,
+//   todoId: string,
+//   userId: string
+// ): Promise<Todo> {
+
+//   console.log('Entering Business Logic function');
+
+//   return await todoAccess.updateTodo({
+//     userId: userId,
+//     todoId: todoId,
+//     name: updateTodoRequest.name,
+//     dueDate: updateTodoRequest.dueDate,
+//     done: updateTodoRequest.done,
+//     // attachmentUrl?: string
+//   });
+// }

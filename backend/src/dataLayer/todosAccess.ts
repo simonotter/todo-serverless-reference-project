@@ -47,4 +47,18 @@ export class TodoAccess {
 
     console.log(`Delete statement has completed without error`);
   }
+
+//   async updateTodo(todoId: string, userId: string) {
+//     console.log(`Updating a todo with id ${todoId} and userid ${userId}`);
+
+//     // await this.docClient.put({
+//     //   TableName: this.todosTable,
+//     //   Key: {
+//     //     userId: userId,
+//     //     todoId: todoId
+//     //   }
+//     // }).promise();
+
+//     console.log(`Update statement has completed without error`);
+//   }
 }

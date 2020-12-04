@@ -10,17 +10,14 @@
     "dueDate": {
       "type": "string"
     },
-    "createdAt": {
-      "type": "string"
-    },
     "done": {
       "type": "boolean"
     }
-
   },
   "required": [
     "name",
-    "dueDate"
+    "dueDate",
+    "done"
   ],
   "additionalProperties": false
 }
