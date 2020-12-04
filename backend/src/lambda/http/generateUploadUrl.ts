@@ -1,21 +1,20 @@
 import 'source-map-support/register';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import * as AWS  from 'aws-sdk';
 import * as middy from 'middy';
 import { cors } from 'middy/middlewares';
+import { getUrl } from '../../businessLogic/todos';
 
-const s3 = new AWS.S3({
-  signatureVersion: 'v4'
-});
+import { createLogger } from '../../utils/logger';
 
-const bucketName = process.env.IMAGES_S3_BUCKET;
-const urlExpiration: Number = Number(process.env.SIGNED_URL_EXPIRATION);
+const logger = createLogger('generateUploadUrl');
+
 
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const todoId = event.pathParameters.todoId;
 
-  const url = getUploadUrl(todoId);
+  const url = await getUrl(todoId);
+  logger.info('url', {url: url });
 
   // Return a presigned URL to upload a file for a TODO item with the provided id
   return {
@@ -27,13 +26,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
 
 });
 
-function getUploadUrl(imageId: string) {
-  return s3.getSignedUrl('putObject', {
-    Bucket: bucketName,
-    Key: imageId,
-    Expires: urlExpiration
-  });
-}
+
 
 handler.use(
   cors({

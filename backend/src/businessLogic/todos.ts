@@ -2,6 +2,8 @@ import * as uuid from 'uuid';
 
 import { Todo } from '../models/Todo';
 import { TodoAccess } from '../dataLayer/todosAccess';
+import { ImageAccess } from '../dataLayer/fileAccess';
+
 import { CreateTodoRequest } from '../requests/CreateTodoRequest';
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest';
 
@@ -10,6 +12,13 @@ import { createLogger } from '../utils/logger';
 const logger = createLogger('todosBusinessLogic');
 
 const todoAccess = new TodoAccess();
+const imageAccess = new ImageAccess();
+
+export async function getUrl(todoId: string): Promise<string> {
+  const url = await imageAccess.getUploadUrl(todoId);
+  logger.info('url', { url: url });
+  return url;
+}
 
 export async function deleteTodo(todoId: string, userId: string) {
   return await todoAccess.deleteTodo(todoId, userId);
