@@ -29,18 +29,16 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
   const userId = parseUserId(jwtToken);
   logger.info('userId: ', { userId: userId });
 
-  // Is this really necessary????
-  let updatedTodo: Todo = {
-    userId: 'string',
-    todoId: 'string',
-    createdAt: 'string',
-    name: 'string',
-    dueDate: 'string',
-    done: false,
-  };
   try {
-    updatedTodo = await updateTodo(todoId, todoToUpdate, userId);
+    const updatedTodo: Todo = await updateTodo(todoId, todoToUpdate, userId);
     logger.info('updatedTodo: ', { updatedTodo: updatedTodo });
+
+    return {
+      statusCode: 204,
+      body: JSON.stringify({
+        updatedTodo
+      })
+    };
 
   } catch (e) {
 
@@ -50,12 +48,6 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     };
   }
 
-  return {
-    statusCode: 204,
-    body: JSON.stringify({
-      updatedTodo
-    })
-  };
 });
 
 handler.use(
