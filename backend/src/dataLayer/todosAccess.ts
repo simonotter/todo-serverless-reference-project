@@ -14,10 +14,6 @@ export class TodoAccess {
   async getTodos(userId: string): Promise<Todo[]> {
     console.log('Getting all todos');
 
-    // TODO: Need to only return todos for current user
-    // const result = await this.docClient.scan({
-    //   TableName: this.todosTable
-    // }).promise();
     const result = await this.docClient.query({
       TableName: this.todosTable,
       KeyConditionExpression: '#userId =:i',

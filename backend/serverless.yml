@@ -46,11 +46,11 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
-    iamRoleStatementsName: Scan-DynamoDB-Todos-Table
+    iamRoleStatementsName: Query-DynamoDB-Todos-Table
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - dynamodb:Scan
+          - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
   CreateTodo:
