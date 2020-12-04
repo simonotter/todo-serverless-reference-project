@@ -39,7 +39,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     done: false,
   };
   try {
-    const item = await updateTodo(todoId, todoToUpdate, userId);
+    updatedTodo = await updateTodo(todoId, todoToUpdate, userId);
     logger.info('updatedTodo: ', { updatedTodo: updatedTodo });
 
   } catch (e) {
