@@ -11,8 +11,8 @@ export async function deleteTodo(todoId: string, userId: string) {
   return await todoAccess.deleteTodo(todoId, userId);
 }
 
-export async function getTodos(): Promise<Todo[]> {
-  return todoAccess.getTodos();
+export async function getTodos(userId: string): Promise<Todo[]> {
+  return todoAccess.getTodos(userId);
 }
 
 export async function createTodo(

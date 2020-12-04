@@ -6,12 +6,17 @@ import * as middy from 'middy';
 import { cors } from 'middy/middlewares';
 
 import { getTodos } from '../../businessLogic/todos';
+import { getToken, parseUserId } from '../../auth/utils';
+
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
   console.log('Processing event: ', event);
 
-  const todos = await getTodos();
+  const authHeader = event.headers.Authorization;
+  const jwtToken = getToken(authHeader);
+  const userId = parseUserId(jwtToken);
+  const todos = await getTodos(userId);
 
   return {
     statusCode: 200,
