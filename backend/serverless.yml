@@ -4,7 +4,7 @@ plugins:
   - serverless-webpack
   - serverless-aws-documentation
   - serverless-reqvalidator-plugin
-  # - serverless-iam-roles-per-function
+  - serverless-iam-roles-per-function
 
 provider:
   name: aws
@@ -18,13 +18,13 @@ provider:
   apiGateway:
     shouldStartNameWithService: true # Preparation for serverless framework v3.0.0
 
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:PutItem
-        - dynamodb:Scan
-        - dynamodb:DeleteItem
-      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+  # iamRoleStatements:
+  #   - Effect: Allow
+  #     Action:
+  #       - dynamodb:PutItem
+  #       - dynamodb:Scan
+  #       - dynamodb:DeleteItem
+  #     Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
 custom:
   documentation:
@@ -53,7 +53,13 @@ functions:
           method: get
           path: todos
           cors: true
-          # authorizer: Auth
+          authorizer: Auth
+    iamRoleStatementsName: Scan-DynamoDB-Todos-Table
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Scan
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
@@ -69,7 +75,14 @@ functions:
             description: Create a new todo
             requestModels:
               'application/json': CreateTodoRequest
+    iamRoleStatementsName: Put-Into-DynamoDB-Todos-Table
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
+  # TODO: Configure this function
   # UpdateTodo:
   #   handler: src/lambda/http/updateTodo.handler
   #   events:
@@ -85,7 +98,6 @@ functions:
   #           requestModels:
   #             'application/json': UpdateTodoRequest
 
-  # TODO: Configure this function
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
     events:
@@ -97,6 +109,12 @@ functions:
           documentation:
             summary: Delete a todo
             description: Delete a todo
+    iamRoleStatementsName: Delete-from-DynamoDB-Todos-Table
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
 
   # TODO: Configure this function
