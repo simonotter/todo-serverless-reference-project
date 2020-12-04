@@ -18,14 +18,6 @@ provider:
   apiGateway:
     shouldStartNameWithService: true # Preparation for serverless framework v3.0.0
 
-  # iamRoleStatements:
-  #   - Effect: Allow
-  #     Action:
-  #       - dynamodb:PutItem
-  #       - dynamodb:Scan
-  #       - dynamodb:DeleteItem
-  #     Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
-
 custom:
   documentation:
     api:
