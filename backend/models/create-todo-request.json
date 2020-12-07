@@ -5,13 +5,17 @@
   "properties": {
     "name":{
       "type": "string",
-      "minLength": 1
+      "pattern": "^[a-zA-Z0-9]+$",
+      "minLength": 3,
+      "maxLength": 20
     },
     "dueDate": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
     },
     "createdAt": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
     },
     "done": {
       "type": "boolean"
