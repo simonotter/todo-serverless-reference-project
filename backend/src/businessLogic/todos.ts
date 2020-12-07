@@ -14,9 +14,13 @@ const logger = createLogger('todosBusinessLogic');
 const todoAccess = new TodoAccess();
 const imageAccess = new ImageAccess();
 
-export async function getUrl(todoId: string): Promise<string> {
+export async function getUrl(todoId: string, userId: string): Promise<string> {
+  // Get pre-signed URL from filestore
   const url = await imageAccess.getUploadUrl(todoId);
   logger.info('url', { url: url });
+
+  // Write final url to datastore
+  await todoAccess.updateTodoUrl(todoId, userId);
   return url;
 }
 

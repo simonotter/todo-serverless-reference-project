@@ -12,6 +12,7 @@ export class TodoAccess {
   constructor(
     private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
     private readonly todosTable = process.env.TODOS_TABLE,
+    private readonly bucketName = process.env.IMAGES_S3_BUCKET,
     ) {}
 
   async getTodos(userId: string): Promise<Todo[]> {
@@ -84,6 +85,37 @@ export class TodoAccess {
         ':done': todo.done,
       },
       UpdateExpression: 'SET #todo_name = :name, dueDate = :dueDate, done = :done',
+      ReturnValues: 'ALL_NEW',
+    };
+
+    const result = await this.docClient.update(params).promise();
+
+    logger.info(`Update statement has completed without error`, { result: result });
+
+    return result.Attributes as Todo;
+  }
+
+  async updateTodoUrl(todoId: string, userId: string) {
+    logger.info(`Updating a todo's URL for item:`, {
+      todoId: todoId,
+      userId: userId
+    });
+
+    const url = `https://${this.bucketName}.s3.amazonaws.com/${todoId}`;
+
+    const params = {
+      TableName: this.todosTable,
+      Key: {
+        userId: userId,
+        todoId: todoId
+      },
+      ExpressionAttributeNames: {
+        '#todo_attachmentUrl': 'attachmentUrl'
+      },
+      ExpressionAttributeValues: {
+        ':attachmentUrl': url
+      },
+      UpdateExpression: 'SET #todo_attachmentUrl = :attachmentUrl',
       ReturnValues: 'ALL_NEW',
     };
 
