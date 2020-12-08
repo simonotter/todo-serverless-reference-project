@@ -51,7 +51,11 @@ serverless deploy -v
 
 The `client` folder contains a simple React web application that uses the API.
 
-The only file that you need to edit is the `config.ts` file in the `client` folder. This file configures the client application for the API endpoint and Auth0 configuration.
+The only file that you need to edit is the `config.ts` file in the `client` folder. This file configures the client application for the API endpoint and Auth0 configuration. 
+
+The apiId should be the API Gateway as provided during the backend deployment via the serverless deployment above.
+
+The domain and clientId values should be obtained from your Auth0 application configuration. 
 
 ```ts
 const apiId = '...' API Gateway id  // AWS API Gateway endpoint ID
@@ -67,15 +71,16 @@ export const authConfig = {
 
 To run a client application first edit the `client/src/config.ts` file to set correct parameters. And then run the following commands:
 
-```
+```bash
 cd client
 npm install
 npm run start
 ```
 
-This should start a development server with the React application that will interact with the serverless TODO application.
+This should start a development server with the React application that will interact with the serverless ToDo API.
 
 # Postman collection
 
-An alternative way to test your API, you can use the Postman collection that contains sample requests. You can find a Postman collection in this project. To import this collection, do the following.
+An alternative way to test your API, you can use the Postman collection that contains sample requests. 
 
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/6753f243d6e2f66ccec3)
