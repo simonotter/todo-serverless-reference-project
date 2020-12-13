@@ -4,12 +4,6 @@ A simple ToDo list application using AWS Lambda via the Serverless framework.
 
 Serverless framework backend implements REST API and via AWS Lambdas and AWS API Gateway, Authentication using Auth0, AWS DynamoDB datastore and AWS S3 object store.
 
-## Clone the Express API Demo Application
-
-```bash
-git clone https://github.com/lukeoliff/auth0-postman-express.git
-```
-
 # Functionality of the application
 
 This application allows creating/removing/updating/fetching ToDo items. Each ToDo item can optionally have an attachment image. Each user only has access to ToDo items that he/she has created. Authentication provide via integration with Auth0 authentication service.
